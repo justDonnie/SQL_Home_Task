@@ -1,0 +1,191 @@
+create table countries
+(
+    country_id serial,
+    country_name varchar);
+drop table countries;
+create table countries
+(
+    country_id serial primary key ,
+    country_name varchar(50)
+);
+insert into countries(country_name)
+values
+        ('Kyrgyzstan'),
+        ('USA'),
+        ('Italy'),
+        ('Canada'),
+        ('Spain'),
+        ('Switzerland'),
+        ('New Zealand'),
+        ('Norway'),
+        ('France'),
+        ('Austria');
+create table universities
+(
+    university_id serial primary key ,
+    name varchar (50) not null
+);
+drop table universities;
+create table universities
+(
+    university_id serial primary key ,
+    name varchar (50) not null,
+    country_id int references countries(country_id)
+);
+insert into universities(name,country_id)
+values ('YALE University',2),
+       ('MIT',2),
+       ('Manas University',1),
+       ('Bergen SU',8),
+       ('NZL State University',7),
+       ('Torino Tech College',3),
+       ('Milan State College',3),
+       ('Spain Tech University',5),
+       ('Paris Fashion House',9),
+       ('I.Akhunbaev Medical Academy',1),
+       ('AIU',10),
+       ('North Canadian College',4),
+       ('Swiss Business College',6);
+alter table universities rename column name to university_name;
+create table hospitals (
+    id serial primary key ,
+    hospital_name varchar (60) not null,
+    country_id int references countries(country_id)
+);
+insert into hospitals (hospital_name, country_id)
+values ('Akhunbaev Hospital',1),
+       ('Italian State Hospital',3),
+       ('Austria State Hospital',10),
+       ('Canada State Hospital',4),
+       ('French State Hospital',9),
+       ('NZL State Hospital',7),
+       ('Norway State Hospital',8),
+       ('US State Hospital',2),
+       ('Swiss State Hospital',6),
+       ('Barcelona State Hospital',5);
+create table faculties
+(
+    id serial primary key ,
+    faculty_name varchar (70) not null ,
+    university_id int references universities (university_id)
+);
+alter table faculties rename column id to faculty_id;
+insert into faculties(faculty_name, university_id)
+values ('LAW',2),
+       ('ART',5),
+       ('INTERNATIONAL RELATIONS',1),
+       ('ARCHITECTURE',10),
+       ('FINANCE',3),
+       ('SURGERY',10),
+       ('MODERN FASHION',7),
+       ('BUSINESS',4),
+       ('MANAGEMENT',6),
+       ('HISTORY',12);
+create table students
+( id serial primary key ,
+full_name varchar (50) not null ,
+age int not null ,
+email varchar (70) unique);
+alter table students rename column id to students_id;
+drop table students;
+create table students
+( id serial primary key ,
+  full_name varchar (50) not null ,
+  age int not null ,
+  email varchar (70) unique,
+  university_id int references universities(university_id));
+alter table students rename column id to students_id;
+drop table students;
+create table students
+(
+    students_id serial primary key ,
+    full_name varchar (50) not null ,
+    age int not null ,
+    email varchar (70) unique,
+    faculty_id int references faculties(faculty_id),
+    university_id int references universities(university_id)
+);
+insert into students (full_name, age, email,faculty_id,university_id)
+values ('Sam Anders',23,'sam@gmail.com',2,7),
+       ('Andrew Meyers',22,'andrew@gmail.com',1,9),
+       ('Linda Johns',22,'linda@gmail.com',3,6),
+       ('Jason Statham',24,'jason@gmail.com',8,2),
+       ('Lebron James',20,'james10@gmail.com',10,5);
+
+--alter table hospitals add departments varchar (50);
+--alter table hospitals drop column departments;
+create table companies
+(
+    id serial primary key,
+    company_name varchar (59) not null ,
+    description varchar (50) not null
+);
+alter table companies add country_id int references countries(country_id);
+insert into companies
+(company_name, description,country_id)
+values ('AMAZON','Market Place',2),
+       ('Ali Baba','Market Place',1),
+       ('Shoro','Goods',1),
+       ('IKEA','Home Furniture',6),
+       ('Beko','Home Technologies',5),
+       ('AIRBUS','AirCraft Engineering',7),
+       ('AIRBNB','Apartment Renting',10),
+       ('Spotify','Musical Producing',8);
+create table market
+(
+    market_id serial primary key ,
+    market_name varchar (50) not null
+);
+insert into market (market_name)
+values ('Globus'),
+       ('Frunze'),
+       ('Asia MALL'),
+       ('MEGA'),
+       ('Tommy MALL'),
+       ('DORDOI'),
+       ('Orto-Sai Market'),
+       ('Spar');
+create table goods
+( goods_id serial primary key ,
+goods_name varchar (99) not null ,
+price int ,
+market_id int references market(market_id));
+insert into goods (goods_name, price, market_id)
+values ('liquid soap',80,3),
+       ('washing powder',400,1),
+       ('carrot',90,8),
+       ('potato',80,4),
+       ('tomato',40,5),
+       ('meat',1000,7),
+       ('mashroom',400,1),
+       ('sausages',200,3),
+       ('shampoo',800,1),
+       ('watermelon',400,2),
+       ('apricot',400,6);
+create table salesmen(id serial primary key ,
+full_name varchar (60) not null ,
+age int ,
+market_id int references market(market_id));
+insert into salesmen (full_name, age, market_id)
+values ('Darek Miles',34,3),
+       ('Gregory Holmes',56,2),
+       ('Tom Cruise',50,1),
+       ('Dany Boon',59,8),
+       ('Brandon Moorey',40,5),
+       ('Mike Tyson',63,7),
+       ('Sally Rodriguez',36,4),
+       ('Roy Johns',66,6);
+create table currencies (id serial primary key ,
+currency_name varchar (50) not null,
+country_code int references countries(country_id));
+insert into currencies (currency_name, country_code)
+values ('SOM',1),
+       ('DOLLAR',2),
+       ('EURO',3),
+       ('CANADIAN DOLLAR',4),
+       ('EURO',5),
+       ('FRANK',6),
+       ('NZL DOLLAR',7),
+       ('NORWAY KRON',8),
+       ('EURO',9),
+       ('EURO',10);
